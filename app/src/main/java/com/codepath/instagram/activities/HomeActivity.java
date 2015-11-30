@@ -6,6 +6,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.codepath.instagram.R;
+import com.codepath.instagram.helpers.Utils;
+import com.codepath.instagram.models.InstagramPost;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -15,6 +24,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        List<InstagramPost> posts = fetchPosts();
+        InstagramPost post = posts.get(0);
     }
 
     @Override
@@ -37,5 +48,19 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private List<InstagramPost> fetchPosts() {
+        try {
+            JSONObject postsJson = Utils.loadJsonFromAsset(this, "popular.json");
+            return Utils.decodePostsFromJsonResponse(postsJson);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
     }
 }
