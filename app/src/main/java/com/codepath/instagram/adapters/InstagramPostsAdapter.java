@@ -42,6 +42,7 @@ public class InstagramPostsAdapter extends
         public TextView tvCaption;
         public TextView tvLikeCount;
 
+        public TextView tvAllComments;
         public LinearLayout llComments;
 
         public PostViewHolder(View itemView) {
@@ -53,6 +54,7 @@ public class InstagramPostsAdapter extends
             tvCaption = (TextView) itemView.findViewById(R.id.tvCaption);
             tvLikeCount = (TextView) itemView.findViewById(R.id.tvLikesCount);
             llComments = (LinearLayout) itemView.findViewById(R.id.llComments);
+            tvAllComments = (TextView) itemView.findViewById(R.id.tvAllComments);
         }
     }
 
@@ -108,16 +110,7 @@ public class InstagramPostsAdapter extends
         }
 
         Context context = holder.itemView.getContext();
-        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(
-                context.getResources().getColor(R.color.blue_text));
-        TypefaceSpan typefaceSpan = new TypefaceSpan("sans-serif-medium");
-
-        SpannableStringBuilder ssb = new SpannableStringBuilder(post.user.userName);
-        ssb.setSpan(foregroundColorSpan, 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ssb.setSpan(typefaceSpan, 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ssb.append(" ");
-        ssb.append(post.caption);
-        holder.tvCaption.setText(ssb);
+        holder.tvCaption.setText(formatUserAndText(context, post.user.userName, post.caption));
     }
 
     private void renderComments(PostViewHolder holder, InstagramPost post) {
@@ -128,6 +121,8 @@ public class InstagramPostsAdapter extends
             return;
         }
 
+        renderCommentSummary(holder, post);
+
         for (int i=0; i < 2 && i < post.comments.size(); i++) {
             InstagramComment comment = post.comments.get(i);
 
@@ -135,10 +130,38 @@ public class InstagramPostsAdapter extends
                     .from(holder.itemView.getContext())
                     .inflate(R.layout.layout_item_text_comment, holder.llComments, false);
             TextView tvComment = (TextView) commentView.findViewById(R.id.tvComment);
-            tvComment.setText(comment.text);
+            Context context = holder.itemView.getContext();
+            tvComment.setText(formatUserAndText(context, comment.user.userName, comment.text));
 
             holder.llComments.addView(commentView);
         }
+    }
+
+    private void renderCommentSummary(PostViewHolder holder, InstagramPost post) {
+        if (post.commentsCount < 3) {
+            holder.tvAllComments.setVisibility(View.GONE);
+            return;
+        }
+        Context context = holder.itemView.getContext();
+        String summary = context.getString(R.string.view_all);
+        summary += ' ';
+        summary += String.valueOf(post.commentsCount);
+        summary += ' ';
+        summary += context.getString(R.string.comments);
+        holder.tvAllComments.setText(summary);
+    }
+
+    private SpannableStringBuilder formatUserAndText(Context context, String userName, String text) {
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(
+                context.getResources().getColor(R.color.blue_text));
+        TypefaceSpan typefaceSpan = new TypefaceSpan("sans-serif-medium");
+
+        SpannableStringBuilder ssb = new SpannableStringBuilder(userName);
+        ssb.setSpan(foregroundColorSpan, 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ssb.setSpan(typefaceSpan, 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ssb.append(" ");
+        ssb.append(text);
+        return ssb;
     }
 
     @Override
