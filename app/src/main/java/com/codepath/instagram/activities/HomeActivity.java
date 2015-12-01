@@ -6,30 +6,35 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.codepath.instagram.R;
 import com.codepath.instagram.adapters.InstagramPostsAdapter;
 import com.codepath.instagram.helpers.SimpleVerticalSpacerItemDecoration;
 import com.codepath.instagram.helpers.Utils;
 import com.codepath.instagram.models.InstagramPost;
+import com.codepath.instagram.networking.InstagramClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
+    private List<InstagramPost> posts = new ArrayList<>();
+    InstagramPostsAdapter postsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        InstagramPostsAdapter postsAdapter = new InstagramPostsAdapter(fetchPosts());
+        postsAdapter = new InstagramPostsAdapter(posts);
         RecyclerView rvPosts = (RecyclerView) findViewById(R.id.rvPosts);
 
         int spacing = getResources().getInteger(R.integer.post_spacing);
@@ -38,6 +43,8 @@ public class HomeActivity extends AppCompatActivity {
         rvPosts.addItemDecoration(spacingDecoration);
         rvPosts.setAdapter(postsAdapter);
         rvPosts.setLayoutManager(new LinearLayoutManager(this));
+
+        fetchPosts();
     }
 
     @Override
@@ -62,17 +69,24 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private List<InstagramPost> fetchPosts() {
-        try {
-            JSONObject postsJson = Utils.loadJsonFromAsset(this, "popular.json");
-            return Utils.decodePostsFromJsonResponse(postsJson);
+    private void fetchPosts() {
+        InstagramClient.getPopularFeed(
+                new JsonHttpResponseHandler() {
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        List<InstagramPost> newPosts = Utils.decodePostsFromJsonResponse(response);
+                        posts.clear();
+                        posts.addAll(newPosts);
+                        postsAdapter.notifyDataSetChanged();
+                    }
 
-        return new ArrayList<>();
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        String msg = "Failed to get Instagram feed: " + String.valueOf(statusCode);
+                        Toast.makeText(HomeActivity.this, msg, Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
     }
 }
