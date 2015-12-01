@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.codepath.instagram.R;
 import com.codepath.instagram.adapters.InstagramPostsAdapter;
+import com.codepath.instagram.helpers.SimpleVerticalSpacerItemDecoration;
 import com.codepath.instagram.helpers.Utils;
 import com.codepath.instagram.models.InstagramPost;
 
@@ -30,6 +31,11 @@ public class HomeActivity extends AppCompatActivity {
 
         InstagramPostsAdapter postsAdapter = new InstagramPostsAdapter(fetchPosts());
         RecyclerView rvPosts = (RecyclerView) findViewById(R.id.rvPosts);
+
+        int spacing = getResources().getInteger(R.integer.post_spacing);
+        SimpleVerticalSpacerItemDecoration spacingDecoration =
+                new SimpleVerticalSpacerItemDecoration(spacing);
+        rvPosts.addItemDecoration(spacingDecoration);
         rvPosts.setAdapter(postsAdapter);
         rvPosts.setLayoutManager(new LinearLayoutManager(this));
     }

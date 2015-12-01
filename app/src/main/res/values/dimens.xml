@@ -11,5 +11,7 @@
     <dimen name="likes_padding_top">10dp</dimen>
     <dimen name="likes_padding_bottom">4dp</dimen>
     <dimen name="font_size">14sp</dimen>
+
     <item name="line_space_x" format="float" type="dimen">1.2</item>
+    <integer name="post_spacing">24</integer>
 </resources>
