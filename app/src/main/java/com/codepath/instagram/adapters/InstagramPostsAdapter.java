@@ -78,8 +78,12 @@ public class InstagramPostsAdapter extends
                 .placeholder(R.drawable.gray_rectangle)
                 .into(holder.ivGraphic);
 
-        holder.tvCaption.setText(post.caption);
         holder.tvLikeCount.setText(Utils.formatNumberForDisplay(post.likesCount));
+
+        holder.tvCaption.setText(post.caption);
+        if (post.caption == null || post.caption.equals("")) {
+            holder.tvCaption.setVisibility(View.GONE);
+        }
     }
 
     @Override

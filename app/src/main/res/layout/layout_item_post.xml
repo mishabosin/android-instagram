@@ -46,6 +46,10 @@
         android:text="Medium Text"
         android:id="@+id/tvCaption"
         android:layout_below="@+id/tvLikesCount"
+        android:fontFamily="sans-serif"
+        android:textSize="@dimen/font_size"
+        android:textColor="@color/gray_text"
+        android:lineSpacingMultiplier="@dimen/line_space_x"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
