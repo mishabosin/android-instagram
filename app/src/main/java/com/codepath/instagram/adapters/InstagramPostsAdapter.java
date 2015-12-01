@@ -1,7 +1,12 @@
 package com.codepath.instagram.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.format.DateUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.TypefaceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +63,17 @@ public class InstagramPostsAdapter extends
     public void onBindViewHolder(PostViewHolder holder, int position) {
         InstagramPost post = posts.get(position);
 
+        renderAvatar(holder, post);
+        holder.tvUserName.setText(post.user.userName);
+        holder.tvTimeStamp.setText(DateUtils.getRelativeTimeSpanString(post.createdTime * 1000));
+
+        renderPostImage(holder, post);
+        holder.tvLikeCount.setText(Utils.formatNumberForDisplay(post.likesCount));
+
+        renderCaption(holder, post);
+    }
+
+    private void renderAvatar(PostViewHolder holder, InstagramPost post) {
         int radius = R.dimen.avatar_size / 2;
         Transformation makeCircle = new RoundedTransformationBuilder()
                 .cornerRadiusDp(radius)
@@ -70,20 +86,32 @@ public class InstagramPostsAdapter extends
                 .placeholder(R.drawable.gray_oval)
                 .transform(makeCircle)
                 .into(holder.ivUserImg);
-        holder.tvUserName.setText(post.user.userName);
-        holder.tvTimeStamp.setText(DateUtils.getRelativeTimeSpanString(post.createdTime * 1000));
+    }
 
+    private void renderPostImage(PostViewHolder holder, InstagramPost post) {
         Picasso.with(holder.itemView.getContext())
                 .load(post.image.imageUrl)
                 .placeholder(R.drawable.gray_rectangle)
                 .into(holder.ivGraphic);
+    }
 
-        holder.tvLikeCount.setText(Utils.formatNumberForDisplay(post.likesCount));
-
-        holder.tvCaption.setText(post.caption);
+    private void renderCaption(PostViewHolder holder, InstagramPost post) {
         if (post.caption == null || post.caption.equals("")) {
             holder.tvCaption.setVisibility(View.GONE);
+            return;
         }
+
+        Context context = holder.itemView.getContext();
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(
+                context.getResources().getColor(R.color.blue_text));
+        TypefaceSpan typefaceSpan = new TypefaceSpan("sans-serif-medium");
+
+        SpannableStringBuilder ssb = new SpannableStringBuilder(post.user.userName);
+        ssb.setSpan(foregroundColorSpan, 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ssb.setSpan(typefaceSpan, 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ssb.append(" ");
+        ssb.append(post.caption);
+        holder.tvCaption.setText(ssb);
     }
 
     @Override
