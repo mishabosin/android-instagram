@@ -11,7 +11,9 @@ import android.widget.TextView;
 import com.codepath.instagram.R;
 import com.codepath.instagram.helpers.Utils;
 import com.codepath.instagram.models.InstagramPost;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.List;
 
@@ -56,18 +58,23 @@ public class InstagramPostsAdapter extends
     public void onBindViewHolder(PostViewHolder holder, int position) {
         InstagramPost post = posts.get(position);
 
-        //TODO: const for profile pic height width
+        int radius = R.dimen.avatar_size / 2;
+        Transformation makeCircle = new RoundedTransformationBuilder()
+                .cornerRadiusDp(radius)
+                .oval(true)
+                .build();
+
         Picasso.with(holder.itemView.getContext())
                 .load(post.user.profilePictureUrl)
-                .resize(30, 30)
+                .fit()
                 .placeholder(R.drawable.gray_oval)
-                .into(holder.ivGraphic);
+                .transform(makeCircle)
+                .into(holder.ivUserImg);
         holder.tvUserName.setText(post.user.userName);
         holder.tvTimeStamp.setText(DateUtils.getRelativeTimeSpanString(post.createdTime * 1000));
 
         Picasso.with(holder.itemView.getContext())
                 .load(post.image.imageUrl)
-                .resize(post.image.imageWidth, 0)
                 .placeholder(R.drawable.gray_rectangle)
                 .into(holder.ivGraphic);
 
