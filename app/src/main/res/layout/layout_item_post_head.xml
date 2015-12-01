@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="@dimen/post_header_height">
 
     <ImageView
         android:layout_width="@dimen/avatar_size"
@@ -8,28 +8,35 @@
         android:id="@+id/ivUserImg"
         android:contentDescription="@string/profile_pic"
         android:src="@mipmap/ic_launcher"
-        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginRight="@dimen/avatar_space" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
+        android:text="User Name"
         android:id="@+id/tvUserName"
-        android:layout_alignBottom="@+id/ivUserImg"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/ivUserImg"
+        android:layout_toEndOf="@+id/ivUserImg"
+        android:textColor="@color/blue_text"
+        android:textSize="@dimen/font_size"
+        android:fontFamily="sans-serif-medium" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
+        android:text="time stamp"
         android:id="@+id/tvTimeStamp"
-        android:layout_alignBottom="@+id/ivUserImg"
-        android:layout_toRightOf="@+id/ivUserImg"
-        android:layout_toEndOf="@+id/ivUserImg" />
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:fontFamily="sans-serif"
+        android:textSize="@dimen/font_size"
+        android:textColor="@color/light_gray_text" />
 
 </RelativeLayout>

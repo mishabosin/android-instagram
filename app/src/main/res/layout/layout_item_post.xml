@@ -5,7 +5,7 @@
 
     <include
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/post_header_height"
         layout="@layout/layout_item_post_head"
         android:id="@+id/lvHead"
         android:layout_alignParentTop="true"
