@@ -11,10 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.codepath.instagram.R;
 import com.codepath.instagram.helpers.Utils;
+import com.codepath.instagram.models.InstagramComment;
 import com.codepath.instagram.models.InstagramPost;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
@@ -40,6 +42,8 @@ public class InstagramPostsAdapter extends
         public TextView tvCaption;
         public TextView tvLikeCount;
 
+        public LinearLayout llComments;
+
         public PostViewHolder(View itemView) {
             super(itemView);
             tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
@@ -48,6 +52,7 @@ public class InstagramPostsAdapter extends
             ivGraphic = (ImageView) itemView.findViewById(R.id.ivGraphic);
             tvCaption = (TextView) itemView.findViewById(R.id.tvCaption);
             tvLikeCount = (TextView) itemView.findViewById(R.id.tvLikesCount);
+            llComments = (LinearLayout) itemView.findViewById(R.id.llComments);
         }
     }
 
@@ -71,6 +76,7 @@ public class InstagramPostsAdapter extends
         holder.tvLikeCount.setText(Utils.formatNumberForDisplay(post.likesCount));
 
         renderCaption(holder, post);
+        renderComments(holder, post);
     }
 
     private void renderAvatar(PostViewHolder holder, InstagramPost post) {
@@ -112,6 +118,27 @@ public class InstagramPostsAdapter extends
         ssb.append(" ");
         ssb.append(post.caption);
         holder.tvCaption.setText(ssb);
+    }
+
+    private void renderComments(PostViewHolder holder, InstagramPost post) {
+        holder.llComments.removeAllViews();
+
+        if (post.comments == null || post.comments.size() == 0) {
+            holder.llComments.setVisibility(View.GONE);
+            return;
+        }
+
+        for (int i=0; i < 2 && i < post.comments.size(); i++) {
+            InstagramComment comment = post.comments.get(i);
+
+            View commentView = LayoutInflater
+                    .from(holder.itemView.getContext())
+                    .inflate(R.layout.layout_item_text_comment, holder.llComments, false);
+            TextView tvComment = (TextView) commentView.findViewById(R.id.tvComment);
+            tvComment.setText(comment.text);
+
+            holder.llComments.addView(commentView);
+        }
     }
 
     @Override
