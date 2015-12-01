@@ -28,6 +28,13 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/tvLikesCount"
+        android:drawableLeft="@drawable/ic_heart"
+        android:drawablePadding="@dimen/likes_icon_padding"
+        android:paddingTop="@dimen/likes_padding_top"
+        android:paddingBottom="@dimen/likes_padding_bottom"
+        android:textColor="@color/blue_text"
+        android:textSize="@dimen/font_size"
+        android:fontFamily="sans-serif-medium"
         android:layout_below="@+id/ivGraphic"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
