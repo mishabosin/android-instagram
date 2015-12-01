@@ -2,17 +2,45 @@
 
 ## Overview
 
-This is the starter project for the Instagram Client Project. 
+This is a Instagram Client Project.
+ 
+Submitted by: **Misha Bosin**
+ 
+Time spent: **10** hours spent in total (including setting up the requirement)
 
-## What's Included
-* <tt>com.codepath.instagram.models</tt> => We've built out the models so you can work directly with post, user, and image objects instead of having to deal with json.
-* <tt>com.codepath.instagram.helpers</tt> => Here you can find helpful classes / methods that will come in handy throughout the project. These will be referenced when they are needed.
-* <tt>com.codepath.instagram.persistence</tt> => This is where we've provided a lot of the boilerplate code you need for working with SQLite which will be used in the persistence story.
-* <tt>Drawables</tt> => Don't worry about searching for images that will look good. We've already provided a majority of the assets you'll need.
-* <tt>Colors</tt> => We've included some of the colors (in <tt>colors.xml</tt>) that you'll need. You'll notice that the mocks will refer to the color name instead of the hex value.
-* <tt>Dependencies</tt> => We've pulled in the dependencies you need (with the correct versions) into <tt>build.gradle</tt> so you can skip this step when you come across it in the guides. These include [Picasso](https://github.com/square/picasso), [RecyclerView](https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html), and [android-async-http](http://loopj.com/android-async-http/).
 
-## Finished Project
-* By the end of the project, you will have built something that looks like the following:
+## User Stories
 
-  ![Imgur](http://i.imgur.com/4SWlsQA.gif)
+* [x] User can scroll through the popular posts from Instagram.
+* For each post displayed, user can see the following details:
+* [x] Graphic, Caption, Username, User profile image
+* [x] Relative timestamp, Like count
+* [x] Display each user profile image as a circle.
+* [x] Display a nice default placeholder graphic for each image during loading.
+* [x] The following user story is optional:
+
+* [x] Display each post with the same style and proportions as the real Instagram.
+
+## Video Walkthrough
+
+  ![Imgur](http://i.imgur.com/1nOnC3O.gif)
+
+## Notes
+
+* Learned a lot about the rendering properties
+
+## License
+
+    Copyright 2015 Misha Bosin
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
