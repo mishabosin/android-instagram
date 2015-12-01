@@ -6,13 +6,13 @@ This is a Instagram Client Project.
  
 Submitted by: **Misha Bosin**
  
-Time spent: **10** hours spent in total (including setting up the requirement)
+Time spent: **7** hours spent in total
 
 
 ## User Stories
 
 * [x] User can scroll through the popular posts from Instagram.
-* For each post displayed, user can see the following details:
+For each post displayed, user can see the following details:
 * [x] Graphic, Caption, Username, User profile image
 * [x] Relative timestamp, Like count
 * [x] Display each user profile image as a circle.
