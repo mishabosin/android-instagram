@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.codepath.instagram.R;
 import com.codepath.instagram.adapters.InstagramPostsAdapter;
+import com.codepath.instagram.core.MainApplication;
 import com.codepath.instagram.helpers.Constants;
 import com.codepath.instagram.helpers.SimpleVerticalSpacerItemDecoration;
 import com.codepath.instagram.helpers.Utils;
@@ -41,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        instagramClient = new InstagramClient(this);
+        instagramClient = MainApplication.getRestClient();
 
         initAdapter();
         initRecyclerView();
@@ -98,7 +99,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void fetchPosts() {
-        instagramClient.getPopularFeed(
+        instagramClient.getMyFeed(
                 new JsonHttpResponseHandler() {
 
                     @Override

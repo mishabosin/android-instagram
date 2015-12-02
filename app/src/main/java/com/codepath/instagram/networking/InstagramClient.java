@@ -29,7 +29,7 @@ public class InstagramClient extends OAuthBaseClient {
     }
 
     public void getMyFeed(JsonHttpResponseHandler responseHandler) {
-        String url = getApiUrl("users/self/media/liked");
+        String url = getApiUrl("users/self/feed");
         client.get(url, responseHandler);
     }
 

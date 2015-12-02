@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.codepath.instagram.R;
 import com.codepath.instagram.adapters.InstagramCommentsAdapter;
+import com.codepath.instagram.core.MainApplication;
 import com.codepath.instagram.helpers.Constants;
 import com.codepath.instagram.helpers.Utils;
 import com.codepath.instagram.models.InstagramComment;
@@ -33,7 +34,7 @@ public class CommentsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_comments);
         setTitle(getString(R.string.comments_title));
 
-        instagramClient = new InstagramClient(this);
+        instagramClient = MainApplication.getRestClient();
         final Intent intent = getIntent();
         String mediaId = intent.getStringExtra(Constants.INTENT_PAYLOAD_MEDIA_ID);
 
