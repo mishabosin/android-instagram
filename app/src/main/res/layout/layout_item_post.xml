@@ -22,20 +22,29 @@
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/post_image" />
 
+    <include
+        android:id="@+id/rlPostActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_item_post_actions"
+        android:layout_below="@+id/ivGraphic"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/tvLikesCount"
-        android:drawableLeft="@drawable/ic_heart"
+        android:drawableLeft="@drawable/ic_small_heart_filled"
         android:drawablePadding="@dimen/likes_icon_padding"
         android:paddingTop="@dimen/likes_padding_top"
         android:paddingBottom="@dimen/likes_padding_bottom"
         android:textColor="@color/blue_text"
         android:textSize="@dimen/font_size"
         android:fontFamily="sans-serif-medium"
-        android:layout_below="@+id/ivGraphic"
+        android:layout_below="@+id/rlPostActions"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:paddingLeft="@dimen/activity_horizontal_margin"
