@@ -31,6 +31,7 @@ public class CommentsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
+        setTitle(getString(R.string.comments_title));
 
         final Intent intent = getIntent();
         String mediaId = intent.getStringExtra(Constants.INTENT_PAYLOAD_MEDIA_ID);

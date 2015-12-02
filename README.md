@@ -25,7 +25,7 @@ Time spent: **7** hours spent in total
 * [x] Connect the app with the Instagram API and get real time data using async-http-client library.
 * [x] Show the last 2 comments for each photo.
 * [x] User can view all comments for a post within a separate activity.
-* [ ] User can share an image to their friends or email to themselves.
+* [x] User can share an image to their friends or email to themselves.
 
 The following user stories are optional:
 * [ ] Use the Butterknife library to remove all findViewById(...) calls.

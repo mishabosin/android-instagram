@@ -9,6 +9,7 @@
     
     <string name="view_all">View all</string>
     <string name="comments">comments</string>
+    <string name="comments_title">Comments</string>
 
     <string name="heart_img_description">Heart to like the post</string>
     <string name="comment_img_description">Comment on the post</string>
