@@ -67,7 +67,12 @@ public class InstagramPostsAdapter extends
             tvLikeCount = (TextView) itemView.findViewById(R.id.tvLikesCount);
             llComments = (LinearLayout) itemView.findViewById(R.id.llComments);
             tvAllComments = (TextView) itemView.findViewById(R.id.tvAllComments);
+            ivDots = (ImageView) itemView.findViewById(R.id.ivDots);
 
+            initListeners(itemView);
+        }
+
+        private void initListeners(final View itemView) {
             tvAllComments.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -78,7 +83,6 @@ public class InstagramPostsAdapter extends
                 }
             });
 
-            ivDots = (ImageView) itemView.findViewById(R.id.ivDots);
             ivDots.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
