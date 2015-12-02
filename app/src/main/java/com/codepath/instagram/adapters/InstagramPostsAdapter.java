@@ -78,7 +78,7 @@ public class InstagramPostsAdapter extends
                 public void onClick(View v) {
                     // Triggers click upwards to the adapter on click
                     if (commentsListener != null) {
-                        commentsListener.onCommentsClick(getLayoutPosition());
+                        commentsListener.onCommentsClick(getLayoutPosition(), itemView);
                     }
                 }
             });
