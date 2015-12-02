@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.codepath.instagram.R;
 import com.codepath.instagram.helpers.Utils;
 import com.codepath.instagram.listeners.OnAllCommentsClickListener;
+import com.codepath.instagram.listeners.OnShareClickListener;
 import com.codepath.instagram.models.InstagramComment;
 import com.codepath.instagram.models.InstagramPost;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
@@ -32,10 +33,15 @@ public class InstagramPostsAdapter extends
 
     // Define listener member variable
     private static OnAllCommentsClickListener commentsListener;
+    private static OnShareClickListener shareClickListener;
 
     // Define the method that allows the parent activity or fragment to define the listener
     public void setOnAllCommentsClickListener(OnAllCommentsClickListener listener) {
         this.commentsListener = listener;
+    }
+
+    public void setOnShareClickListener(OnShareClickListener listener) {
+        this.shareClickListener = listener;
     }
 
     public static class PostViewHolder extends RecyclerView.ViewHolder {
@@ -49,8 +55,9 @@ public class InstagramPostsAdapter extends
 
         public TextView tvAllComments;
         public LinearLayout llComments;
+        public ImageView ivDots;
 
-        public PostViewHolder(View itemView) {
+        public PostViewHolder(final View itemView) {
             super(itemView);
             tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
             ivUserImg = (ImageView) itemView.findViewById(R.id.ivUserImg);
@@ -67,6 +74,16 @@ public class InstagramPostsAdapter extends
                     // Triggers click upwards to the adapter on click
                     if (commentsListener != null) {
                         commentsListener.onCommentsClick(getLayoutPosition());
+                    }
+                }
+            });
+
+            ivDots = (ImageView) itemView.findViewById(R.id.ivDots);
+            ivDots.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (shareClickListener != null) {
+                        shareClickListener.onShareClick(itemView);
                     }
                 }
             });

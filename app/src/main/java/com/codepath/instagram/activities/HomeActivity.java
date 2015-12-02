@@ -1,20 +1,24 @@
 package com.codepath.instagram.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.codepath.instagram.R;
 import com.codepath.instagram.adapters.InstagramPostsAdapter;
-import com.codepath.instagram.listeners.OnAllCommentsClickListener;
 import com.codepath.instagram.helpers.Constants;
 import com.codepath.instagram.helpers.SimpleVerticalSpacerItemDecoration;
 import com.codepath.instagram.helpers.Utils;
+import com.codepath.instagram.listeners.OnAllCommentsClickListener;
+import com.codepath.instagram.listeners.OnShareClickListener;
 import com.codepath.instagram.models.InstagramPost;
 import com.codepath.instagram.networking.InstagramClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -42,6 +46,12 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onCommentsClick(int position) {
                 startAllCommentsActivity(position);
+            }
+        });
+        postsAdapter.setOnShareClickListener(new OnShareClickListener() {
+            @Override
+            public void onShareClick(View itemView) {
+                startSharePostActivity(itemView);
             }
         });
 
@@ -109,5 +119,22 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = new Intent(HomeActivity.this, CommentsActivity.class);
         intent.putExtra(Constants.INTENT_PAYLOAD_MEDIA_ID, targetPost.mediaId);
         startActivity(intent);
+    }
+
+    private void startSharePostActivity(View itemView) {
+        ImageView ivGraphic = (ImageView) itemView.findViewById(R.id.ivGraphic);
+
+        Uri bmpUri = Utils.getLocalBitmapUri(ivGraphic);
+        if (bmpUri != null) {
+            // Construct a ShareIntent with link to image
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+            shareIntent.setType("image/*");
+            // Launch sharing dialog for image
+            startActivity(Intent.createChooser(shareIntent, "Share Image"));
+        } else {
+            // TODO: ...sharing failed, handle error
+        }
     }
 }
