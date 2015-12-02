@@ -1,7 +1,12 @@
 package com.codepath.instagram.helpers;
 
 import android.content.Context;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.TypefaceSpan;
 
+import com.codepath.instagram.R;
 import com.codepath.instagram.models.InstagramComment;
 import com.codepath.instagram.models.InstagramPost;
 import com.codepath.instagram.models.InstagramSearchTag;
@@ -77,5 +82,18 @@ public class Utils {
             jsonArray = jsonObject.optJSONArray("data");
         }
         return jsonArray;
+    }
+
+    public static SpannableStringBuilder formatUserAndText(Context context, String userName, String text) {
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(
+                context.getResources().getColor(R.color.blue_text));
+        TypefaceSpan typefaceSpan = new TypefaceSpan("sans-serif-medium");
+
+        SpannableStringBuilder ssb = new SpannableStringBuilder(userName);
+        ssb.setSpan(foregroundColorSpan, 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ssb.setSpan(typefaceSpan, 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ssb.append(" ");
+        ssb.append(text);
+        return ssb;
     }
 }

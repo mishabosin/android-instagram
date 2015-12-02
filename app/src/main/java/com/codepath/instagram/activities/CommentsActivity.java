@@ -3,12 +3,29 @@ package com.codepath.instagram.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.codepath.instagram.R;
+import com.codepath.instagram.adapters.InstagramCommentsAdapter;
 import com.codepath.instagram.helpers.Constants;
+import com.codepath.instagram.helpers.Utils;
+import com.codepath.instagram.models.InstagramComment;
+import com.codepath.instagram.networking.InstagramClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 public class CommentsActivity extends AppCompatActivity {
+
+    private List<InstagramComment> comments = new ArrayList<>();
+    private InstagramCommentsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +35,31 @@ public class CommentsActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         String mediaId = intent.getStringExtra(Constants.INTENT_PAYLOAD_MEDIA_ID);
 
-        Toast.makeText(CommentsActivity.this, "Media " + mediaId + " was clicked!", Toast.LENGTH_SHORT).show();
+        adapter = new InstagramCommentsAdapter(comments);
+
+        RecyclerView rvComments = (RecyclerView) findViewById(R.id.rvComments);
+        rvComments.setAdapter(adapter);
+        rvComments.setLayoutManager(new LinearLayoutManager(this));
+
+        fetchComments(mediaId);
+    }
+
+    private void fetchComments(String mediaId) {
+        InstagramClient.getMediaComments(mediaId, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                List<InstagramComment> newComments = Utils.decodeCommentsFromJsonResponse(response);
+                comments.clear();
+                comments.addAll(newComments);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                String msg = "Failed to get comments for media: " + String.valueOf(statusCode);
+                Toast.makeText(CommentsActivity.this, msg, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

@@ -2,11 +2,7 @@ package com.codepath.instagram.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.format.DateUtils;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.TypefaceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,7 +125,7 @@ public class InstagramPostsAdapter extends
         }
 
         Context context = holder.itemView.getContext();
-        holder.tvCaption.setText(formatUserAndText(context, post.user.userName, post.caption));
+        holder.tvCaption.setText(Utils.formatUserAndText(context, post.user.userName, post.caption));
     }
 
     private void renderComments(PostViewHolder holder, InstagramPost post) {
@@ -150,7 +146,7 @@ public class InstagramPostsAdapter extends
                     .inflate(R.layout.layout_item_text_comment, holder.llComments, false);
             TextView tvComment = (TextView) commentView.findViewById(R.id.tvComment);
             Context context = holder.itemView.getContext();
-            tvComment.setText(formatUserAndText(context, comment.user.userName, comment.text));
+            tvComment.setText(Utils.formatUserAndText(context, comment.user.userName, comment.text));
 
             holder.llComments.addView(commentView);
         }
@@ -168,19 +164,6 @@ public class InstagramPostsAdapter extends
         summary += ' ';
         summary += context.getString(R.string.comments);
         holder.tvAllComments.setText(summary);
-    }
-
-    private SpannableStringBuilder formatUserAndText(Context context, String userName, String text) {
-        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(
-                context.getResources().getColor(R.color.blue_text));
-        TypefaceSpan typefaceSpan = new TypefaceSpan("sans-serif-medium");
-
-        SpannableStringBuilder ssb = new SpannableStringBuilder(userName);
-        ssb.setSpan(foregroundColorSpan, 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ssb.setSpan(typefaceSpan, 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ssb.append(" ");
-        ssb.append(text);
-        return ssb;
     }
 
     @Override

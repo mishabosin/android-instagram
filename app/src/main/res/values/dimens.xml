@@ -19,6 +19,9 @@
     <dimen name="font_size">14sp</dimen>
 
     <dimen name="comments_all_height">24sp</dimen>
+    <dimen name="comment_avatar_size">36dp</dimen>
+    <dimen name="comment_avatar_margin">16dp</dimen>
+    <dimen name="comment_avatar_margin_right">12dp</dimen>
 
     <item name="line_space_x" format="float" type="dimen">1.2</item>
     <integer name="post_spacing">24</integer>
