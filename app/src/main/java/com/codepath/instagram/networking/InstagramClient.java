@@ -1,19 +1,40 @@
 package com.codepath.instagram.networking;
 
-import com.loopj.android.http.AsyncHttpClient;
+import android.content.Context;
+
+import com.codepath.instagram.helpers.Constants;
+import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-public class InstagramClient {
-    private static String CLIENT_ID = "e05c462ebd86446ea48a5af73769b602";
-    private static AsyncHttpClient client = new AsyncHttpClient();
+import org.scribe.builder.api.Api;
 
-    public static void getPopularFeed(JsonHttpResponseHandler responseHandler) {
-        String url = "https://api.instagram.com/v1/media/popular?client_id=" + CLIENT_ID;
-        client.get(url, null, responseHandler);
+public class InstagramClient extends OAuthBaseClient {
+    private static String CLIENT_ID = "e05c462ebd86446ea48a5af73769b602";
+
+    public static final Class<? extends Api> REST_API_CLASS = InstagramApi.class;
+    public static final String REST_URL = "https://api.instagram.com/v1";
+    public static final String REST_CONSUMER_KEY = "e05c462ebd86446ea48a5af73769b602";
+    public static final String REST_CONSUMER_SECRET = "7f18a14de6c241c2a9ccc9f4a3df4b35";
+    public static final String REDIRECT_URI = Constants.REDIRECT_URI;
+    public static final String SCOPE = Constants.SCOPE;
+
+    public InstagramClient(Context context) {
+        super(context, REST_API_CLASS, REST_URL,
+                REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REDIRECT_URI, SCOPE);
     }
 
-    public static void getMediaComments(String mediaId, JsonHttpResponseHandler responseHandler) {
-        String url = "https://api.instagram.com/v1/media/" + mediaId + "/comments?client_id=" + CLIENT_ID;
+    public void getPopularFeed(JsonHttpResponseHandler responseHandler) {
+        String url = getApiUrl("media/popular");
+        client.get(url, responseHandler);
+    }
+
+    public void getMyFeed(JsonHttpResponseHandler responseHandler) {
+        String url = getApiUrl("users/self/media/liked");
+        client.get(url, responseHandler);
+    }
+
+    public void getMediaComments(String mediaId, JsonHttpResponseHandler responseHandler) {
+        String url = getApiUrl("media/" + mediaId + "/comments?client_id=" + CLIENT_ID);
         client.get(url, null, responseHandler);
     }
 }

@@ -32,6 +32,21 @@ The following user stories are optional:
 * [ ] Use the Butterknife library to remove all findViewById(...) calls.
 * [ ] Robust error handling, check if internet is available, handle network failures.
 
+### Day 3
+
+Time spent: **8** hours total
+
+* [x] User can login to Instagram using OAuth login.
+* [ ] User can view their own feed.
+* [ ] User can search for a user by username.
+* [ ] User can search for a tag.
+* [ ] On the search screen, there will now be 2 tabs corresponding to "USERS" and "TAGS".
+* [ ] When performing a search, the user can switch between the "USERS" tab and the "TAGS" tab and see search results for each one.
+
+The following user stories are optional:
+* [ ] Include a ProgressBar during network loading.
+* [ ] User can get a grid of photos by clicking on a search result (i.e. a user or tag).
+
 ## Video Walkthrough
 
   ![Imgur](http://i.imgur.com/ArpPCZw.gif)

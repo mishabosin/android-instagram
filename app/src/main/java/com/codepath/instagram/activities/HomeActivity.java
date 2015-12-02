@@ -24,23 +24,24 @@ import com.codepath.instagram.models.InstagramPost;
 import com.codepath.instagram.networking.InstagramClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.apache.http.Header;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
-
-
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
     private List<InstagramPost> posts = new ArrayList<>();
     InstagramPostsAdapter postsAdapter;
+    InstagramClient instagramClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        instagramClient = new InstagramClient(this);
 
         initAdapter();
         initRecyclerView();
@@ -97,7 +98,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void fetchPosts() {
-        InstagramClient.getPopularFeed(
+        instagramClient.getPopularFeed(
                 new JsonHttpResponseHandler() {
 
                     @Override
@@ -110,6 +111,12 @@ public class HomeActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        String msg = "Failed to get Instagram feed: " + String.valueOf(statusCode);
+                        Toast.makeText(HomeActivity.this, msg, Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                         String msg = "Failed to get Instagram feed: " + String.valueOf(statusCode);
                         Toast.makeText(HomeActivity.this, msg, Toast.LENGTH_LONG).show();
                     }

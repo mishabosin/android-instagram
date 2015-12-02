@@ -15,17 +15,17 @@ import com.codepath.instagram.models.InstagramComment;
 import com.codepath.instagram.networking.InstagramClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.apache.http.Header;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
-
 public class CommentsActivity extends AppCompatActivity {
 
     private List<InstagramComment> comments = new ArrayList<>();
     private InstagramCommentsAdapter adapter;
+    private InstagramClient instagramClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,7 @@ public class CommentsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_comments);
         setTitle(getString(R.string.comments_title));
 
+        instagramClient = new InstagramClient(this);
         final Intent intent = getIntent();
         String mediaId = intent.getStringExtra(Constants.INTENT_PAYLOAD_MEDIA_ID);
 
@@ -50,7 +51,7 @@ public class CommentsActivity extends AppCompatActivity {
     }
 
     private void fetchComments(String mediaId) {
-        InstagramClient.getMediaComments(mediaId, new JsonHttpResponseHandler() {
+        instagramClient.getMediaComments(mediaId, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
