@@ -134,7 +134,7 @@ public class HomeActivity extends AppCompatActivity {
             // Launch sharing dialog for image
             startActivity(Intent.createChooser(shareIntent, "Share Image"));
         } else {
-            // TODO: ...sharing failed, handle error
+            Toast.makeText(HomeActivity.this, "Failed to share image", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -5,13 +5,12 @@
 This is a Instagram Client Project.
  
 Submitted by: **Misha Bosin**
- 
-Time spent: **7** hours spent in total
-
 
 ## User Stories
 
 ### Day 1
+
+Time spent: **7** hours total
 
 * [x] User can scroll through the popular posts from Instagram.
 * [x] Show the following details: Graphic, Caption, Username, User profile image
@@ -21,6 +20,8 @@ Time spent: **7** hours spent in total
 * [x] Display each post with the same style and proportions as the real Instagram.
 
 ### Day 2
+
+Time spent: **8** hours total
 
 * [x] Connect the app with the Instagram API and get real time data using async-http-client library.
 * [x] Show the last 2 comments for each photo.
@@ -33,7 +34,7 @@ The following user stories are optional:
 
 ## Video Walkthrough
 
-  ![Imgur](http://i.imgur.com/1nOnC3O.gif)
+  ![Imgur](http://i.imgur.com/ArpPCZw.gif)
 
 ## Notes
 
