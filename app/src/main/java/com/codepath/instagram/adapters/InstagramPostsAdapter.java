@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.codepath.instagram.R;
 import com.codepath.instagram.helpers.Utils;
+import com.codepath.instagram.listeners.OnAllCommentsClickListener;
 import com.codepath.instagram.models.InstagramComment;
 import com.codepath.instagram.models.InstagramPost;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
@@ -31,6 +32,14 @@ public class InstagramPostsAdapter extends
 
     public InstagramPostsAdapter(List<InstagramPost> posts) {
         this.posts = posts;
+    }
+
+    // Define listener member variable
+    private static OnAllCommentsClickListener commentsListener;
+
+    // Define the method that allows the parent activity or fragment to define the listener
+    public void setOnAllCommentsClickListener(OnAllCommentsClickListener listener) {
+        this.commentsListener = listener;
     }
 
     public static class PostViewHolder extends RecyclerView.ViewHolder {
@@ -55,6 +64,16 @@ public class InstagramPostsAdapter extends
             tvLikeCount = (TextView) itemView.findViewById(R.id.tvLikesCount);
             llComments = (LinearLayout) itemView.findViewById(R.id.llComments);
             tvAllComments = (TextView) itemView.findViewById(R.id.tvAllComments);
+
+            tvAllComments.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Triggers click upwards to the adapter on click
+                    if (commentsListener != null) {
+                        commentsListener.onCommentsClick(getLayoutPosition());
+                    }
+                }
+            });
         }
     }
 

@@ -1,5 +1,6 @@
 package com.codepath.instagram.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,8 @@ import android.widget.Toast;
 
 import com.codepath.instagram.R;
 import com.codepath.instagram.adapters.InstagramPostsAdapter;
+import com.codepath.instagram.listeners.OnAllCommentsClickListener;
+import com.codepath.instagram.helpers.Constants;
 import com.codepath.instagram.helpers.SimpleVerticalSpacerItemDecoration;
 import com.codepath.instagram.helpers.Utils;
 import com.codepath.instagram.models.InstagramPost;
@@ -35,8 +38,14 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         postsAdapter = new InstagramPostsAdapter(posts);
-        RecyclerView rvPosts = (RecyclerView) findViewById(R.id.rvPosts);
+        postsAdapter.setOnAllCommentsClickListener(new OnAllCommentsClickListener() {
+            @Override
+            public void onCommentsClick(int position) {
+                startAllCommentsActivity(position);
+            }
+        });
 
+        RecyclerView rvPosts = (RecyclerView) findViewById(R.id.rvPosts);
         int spacing = getResources().getInteger(R.integer.post_spacing);
         SimpleVerticalSpacerItemDecoration spacingDecoration =
                 new SimpleVerticalSpacerItemDecoration(spacing);
@@ -88,5 +97,17 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private void startAllCommentsActivity(int position) {
+        InstagramPost targetPost = posts.get(position);
+        // super lame sanity check
+        if (targetPost == null) {
+            return;
+        }
+
+        Intent intent = new Intent(HomeActivity.this, CommentsActivity.class);
+        intent.putExtra(Constants.INTENT_PAYLOAD_MEDIA_ID, targetPost.mediaId);
+        startActivity(intent);
     }
 }
