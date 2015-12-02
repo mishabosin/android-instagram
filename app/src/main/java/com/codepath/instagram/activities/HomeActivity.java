@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import com.codepath.instagram.R;
@@ -18,7 +19,7 @@ import com.codepath.instagram.helpers.Constants;
 import com.codepath.instagram.helpers.SimpleVerticalSpacerItemDecoration;
 import com.codepath.instagram.helpers.Utils;
 import com.codepath.instagram.listeners.OnAllCommentsClickListener;
-import com.codepath.instagram.listeners.OnShareClickListener;
+import com.codepath.instagram.listeners.OnDotsClickListener;
 import com.codepath.instagram.models.InstagramPost;
 import com.codepath.instagram.networking.InstagramClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -48,10 +49,10 @@ public class HomeActivity extends AppCompatActivity {
                 startAllCommentsActivity(position);
             }
         });
-        postsAdapter.setOnShareClickListener(new OnShareClickListener() {
+        postsAdapter.setOnShareClickListener(new OnDotsClickListener() {
             @Override
-            public void onShareClick(View itemView) {
-                startSharePostActivity(itemView);
+            public void onClick(View ivDots, View itemView) {
+                showDotsPopup(ivDots, itemView);
             }
         });
 
@@ -119,6 +120,28 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = new Intent(HomeActivity.this, CommentsActivity.class);
         intent.putExtra(Constants.INTENT_PAYLOAD_MEDIA_ID, targetPost.mediaId);
         startActivity(intent);
+    }
+
+    // Display anchored popup menu based on view selected
+    private void showDotsPopup(View ivDots, final View itemView) {
+        PopupMenu popup = new PopupMenu(this, ivDots);
+        // Inflate the menu from xml
+        popup.getMenuInflater().inflate(R.menu.popup_post, popup.getMenu());
+        // Setup menu item selection
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.mnuShare:
+                        startSharePostActivity(itemView);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        // Handle dismissal with: popup.setOnDismissListener(...);
+        // Show the menu
+        popup.show();
     }
 
     private void startSharePostActivity(View itemView) {

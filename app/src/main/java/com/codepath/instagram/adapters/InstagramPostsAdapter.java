@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.codepath.instagram.R;
 import com.codepath.instagram.helpers.Utils;
 import com.codepath.instagram.listeners.OnAllCommentsClickListener;
-import com.codepath.instagram.listeners.OnShareClickListener;
+import com.codepath.instagram.listeners.OnDotsClickListener;
 import com.codepath.instagram.models.InstagramComment;
 import com.codepath.instagram.models.InstagramPost;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
@@ -33,14 +33,14 @@ public class InstagramPostsAdapter extends
 
     // Define listener member variable
     private static OnAllCommentsClickListener commentsListener;
-    private static OnShareClickListener shareClickListener;
+    private static OnDotsClickListener shareClickListener;
 
     // Define the method that allows the parent activity or fragment to define the listener
     public void setOnAllCommentsClickListener(OnAllCommentsClickListener listener) {
         this.commentsListener = listener;
     }
 
-    public void setOnShareClickListener(OnShareClickListener listener) {
+    public void setOnShareClickListener(OnDotsClickListener listener) {
         this.shareClickListener = listener;
     }
 
@@ -83,7 +83,7 @@ public class InstagramPostsAdapter extends
                 @Override
                 public void onClick(View v) {
                     if (shareClickListener != null) {
-                        shareClickListener.onShareClick(itemView);
+                        shareClickListener.onClick(ivDots, itemView);
                     }
                 }
             });
