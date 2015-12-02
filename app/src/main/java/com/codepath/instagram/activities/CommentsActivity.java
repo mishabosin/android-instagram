@@ -38,11 +38,15 @@ public class CommentsActivity extends AppCompatActivity {
 
         adapter = new InstagramCommentsAdapter(comments);
 
+        initRecyclerView();
+
+        fetchComments(mediaId);
+    }
+
+    private void initRecyclerView() {
         RecyclerView rvComments = (RecyclerView) findViewById(R.id.rvComments);
         rvComments.setAdapter(adapter);
         rvComments.setLayoutManager(new LinearLayoutManager(this));
-
-        fetchComments(mediaId);
     }
 
     private void fetchComments(String mediaId) {

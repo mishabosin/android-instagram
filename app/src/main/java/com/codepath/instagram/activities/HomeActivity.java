@@ -42,6 +42,23 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        initAdapter();
+        initRecyclerView();
+
+        fetchPosts();
+    }
+
+    private void initRecyclerView() {
+        RecyclerView rvPosts = (RecyclerView) findViewById(R.id.rvPosts);
+        int spacing = getResources().getInteger(R.integer.post_spacing);
+        SimpleVerticalSpacerItemDecoration spacingDecoration =
+                new SimpleVerticalSpacerItemDecoration(spacing);
+        rvPosts.addItemDecoration(spacingDecoration);
+        rvPosts.setAdapter(postsAdapter);
+        rvPosts.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void initAdapter() {
         postsAdapter = new InstagramPostsAdapter(posts);
         postsAdapter.setOnAllCommentsClickListener(new OnAllCommentsClickListener() {
             @Override
@@ -55,16 +72,6 @@ public class HomeActivity extends AppCompatActivity {
                 showDotsPopup(ivDots, itemView);
             }
         });
-
-        RecyclerView rvPosts = (RecyclerView) findViewById(R.id.rvPosts);
-        int spacing = getResources().getInteger(R.integer.post_spacing);
-        SimpleVerticalSpacerItemDecoration spacingDecoration =
-                new SimpleVerticalSpacerItemDecoration(spacing);
-        rvPosts.addItemDecoration(spacingDecoration);
-        rvPosts.setAdapter(postsAdapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(this));
-
-        fetchPosts();
     }
 
     @Override
