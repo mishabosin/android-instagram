@@ -1,6 +1,8 @@
 package com.codepath.instagram.networking;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import com.codepath.instagram.helpers.Constants;
 import com.codepath.oauth.OAuthBaseClient;
@@ -56,5 +58,12 @@ public class InstagramClient extends OAuthBaseClient {
         requestParams.put("q", query);
 
         client.get(url, requestParams, responseHandler);
+    }
+
+    public Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 }

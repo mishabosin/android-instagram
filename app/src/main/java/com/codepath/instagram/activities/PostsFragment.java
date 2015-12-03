@@ -1,6 +1,5 @@
 package com.codepath.instagram.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +25,7 @@ import com.codepath.instagram.listeners.OnAllCommentsClickListener;
 import com.codepath.instagram.listeners.OnDotsClickListener;
 import com.codepath.instagram.models.InstagramPost;
 import com.codepath.instagram.networking.InstagramClient;
+import com.codepath.instagram.persistence.InstagramClientDatabase;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -39,6 +39,8 @@ public class PostsFragment extends Fragment {
     private InstagramPostsAdapter postsAdapter;
     private InstagramClient instagramClient;
     private SwipeRefreshLayout swipeContainer;
+
+    private InstagramClientDatabase db;
 
     public static PostsFragment newInstance() {
         return new PostsFragment();
@@ -59,15 +61,15 @@ public class PostsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         instagramClient = MainApplication.getRestClient();
-        Context context = view.getContext();
 
         initAdapter();
         initRecyclerView(view);
         initSwipeContainer(view);
+        initDb();
 
-        fetchPosts(context);
+        getPosts();
     }
-    
+
     private void initAdapter() {
         postsAdapter = new InstagramPostsAdapter(posts);
         postsAdapter.setOnAllCommentsClickListener(new OnAllCommentsClickListener() {
@@ -100,7 +102,7 @@ public class PostsFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchPosts(getContext());
+                fetchPosts();
             }
         });
         // Progress animation colors. The first color is also used in the
@@ -111,23 +113,35 @@ public class PostsFragment extends Fragment {
                 android.R.color.holo_red_light);
     }
 
-    private void fetchPosts(final Context context) {
+    private void initDb() {
+        db = InstagramClientDatabase.getInstance(getContext());
+    }
+
+    private void getPosts() {
+        if (instagramClient.isNetworkAvailable()) {
+            fetchPosts();
+        } else {
+            List<InstagramPost> newPosts = db.getAllInstagramPosts();
+            refreshPosts(newPosts);
+        }
+    }
+
+    private void fetchPosts() {
         instagramClient.getMyFeed(
                 new JsonHttpResponseHandler() {
 
                     private void handleError(int statusCode) {
                         String msg = "Failed to get Instagram feed: " + String.valueOf(statusCode);
-                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
                         swipeContainer.setRefreshing(false);
                     }
 
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         List<InstagramPost> newPosts = Utils.decodePostsFromJsonResponse(response);
-                        posts.clear();
-                        posts.addAll(newPosts);
-                        postsAdapter.notifyDataSetChanged();
-                        swipeContainer.setRefreshing(false);
+                        refreshPosts(newPosts);
+                        db.emptyAllTables();
+                        db.addInstagramPosts(newPosts);
                     }
 
                     @Override
@@ -141,6 +155,13 @@ public class PostsFragment extends Fragment {
                     }
                 }
         );
+    }
+
+    private void refreshPosts(List<InstagramPost> newPosts) {
+        posts.clear();
+        posts.addAll(newPosts);
+        postsAdapter.notifyDataSetChanged();
+        swipeContainer.setRefreshing(false);
     }
 
     private void startAllCommentsActivity(int position, View itemView) {
