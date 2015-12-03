@@ -5,6 +5,7 @@ import android.content.Context;
 import com.codepath.instagram.helpers.Constants;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.scribe.builder.api.Api;
 
@@ -36,5 +37,15 @@ public class InstagramClient extends OAuthBaseClient {
     public void getMediaComments(String mediaId, JsonHttpResponseHandler responseHandler) {
         String url = getApiUrl("media/" + mediaId + "/comments?client_id=" + CLIENT_ID);
         client.get(url, null, responseHandler);
+    }
+
+    // https://api.instagram.com/v1/users/search?q={searchTerm}
+    public void searchUsers(String query, JsonHttpResponseHandler responseHandler) {
+        String url = getApiUrl("users/search");
+
+        RequestParams requestParams = new RequestParams();
+        requestParams.put("q", query);
+
+        client.get(url, requestParams, responseHandler);
     }
 }
