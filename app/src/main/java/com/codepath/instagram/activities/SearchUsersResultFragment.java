@@ -2,15 +2,9 @@ package com.codepath.instagram.activities;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -29,16 +23,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchUsersResultFragment extends Fragment {
+public class SearchUsersResultFragment extends SearchResultsFragment {
     InstagramClient instagramClient;
     List<InstagramUser> users;
     SearchUserResultsAdapter adapter;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -47,36 +35,6 @@ public class SearchUsersResultFragment extends Fragment {
 
         initAdapter();
         initRecyclerView(view);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, final MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar.
-        inflater.inflate(R.menu.menu_search, menu);
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // Fetch the data remotely
-                fetchUsers(query);
-
-                // Reset SearchView
-                searchView.clearFocus();
-                searchView.setQuery("", false);
-                searchView.setIconified(true);
-                searchItem.collapseActionView();
-
-                // Set activity title to searchUsers query
-//                SearchUsersResultFragment.this.setTitle(query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
     }
 
     @Override
@@ -100,7 +58,8 @@ public class SearchUsersResultFragment extends Fragment {
         rvPosts.setLayoutManager(new LinearLayoutManager(view.getContext()));
     }
 
-    private void fetchUsers(String query) {
+    @Override
+    public  void search(String query) {
         instagramClient.searchUsers(query, new JsonHttpResponseHandler() {
 
             @Override

@@ -1,15 +1,9 @@
 package com.codepath.instagram.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -28,16 +22,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchTagResultsFragment extends Fragment {
+public class SearchTagResultsFragment extends SearchResultsFragment {
     List<InstagramSearchTag> tags;
     SearchTagResultsAdapter adapter;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,33 +42,6 @@ public class SearchTagResultsFragment extends Fragment {
         initRecyclerView(view);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, final MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar.
-        inflater.inflate(R.menu.menu_search, menu);
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // Fetch the data remotely
-                fetchTags(query);
-
-                // Reset SearchView
-                searchView.clearFocus();
-                searchView.setQuery("", false);
-                searchView.setIconified(true);
-                searchItem.collapseActionView();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
-    }
-
     public static SearchTagResultsFragment newInstance() {
         return new SearchTagResultsFragment();
     }
@@ -97,7 +57,8 @@ public class SearchTagResultsFragment extends Fragment {
         rvTags.setLayoutManager(new LinearLayoutManager(view.getContext()));
     }
 
-    private void fetchTags(String query) {
+    @Override
+    public void search(String query) {
         InstagramClient instagramClient = MainApplication.getRestClient();
         instagramClient.searchTags(query, new JsonHttpResponseHandler() {
 

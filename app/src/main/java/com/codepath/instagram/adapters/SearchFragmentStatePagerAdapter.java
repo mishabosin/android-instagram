@@ -10,7 +10,7 @@ import com.codepath.instagram.activities.SearchUsersResultFragment;
 import com.codepath.instagram.helpers.SmartFragmentStatePagerAdapter;
 
 public class SearchFragmentStatePagerAdapter extends SmartFragmentStatePagerAdapter {
-    private static int NUM_OF_PAGES = 2;
+    public static int NUM_OF_PAGES = 2;
     private Context context;
 
     public SearchFragmentStatePagerAdapter(FragmentManager fragmentManager, Context context) {
