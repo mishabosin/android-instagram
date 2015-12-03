@@ -23,10 +23,11 @@
     <dimen name="comment_avatar_margin">16dp</dimen>
     <dimen name="comment_avatar_margin_right">12dp</dimen>
 
-    <dimen name="user_item_height">64dp</dimen>
+    <dimen name="search_item_height">64dp</dimen>
     <dimen name="user_avatar_size">40dp</dimen>
     <dimen name="user_avatar_left">16dp</dimen>
     <dimen name="user_avatar_right">12dp</dimen>
+    <dimen name="tag_left">28dp</dimen>
 
     <item name="line_space_x" format="float" type="dimen">1.2</item>
     <integer name="post_spacing">24</integer>

@@ -41,7 +41,16 @@ public class InstagramClient extends OAuthBaseClient {
 
     // https://api.instagram.com/v1/users/search?q={searchTerm}
     public void searchUsers(String query, JsonHttpResponseHandler responseHandler) {
-        String url = getApiUrl("users/search");
+        searchThing("users", query, responseHandler);
+    }
+
+    // https://api.instagram.com/v1/tags/search?q={searchTerm}
+    public void searchTags(String query, JsonHttpResponseHandler responseHandler) {
+        searchThing("tags", query, responseHandler);
+    }
+
+    private void searchThing(String thing, String query, JsonHttpResponseHandler responseHandler) {
+        String url = getApiUrl(thing + "/search");
 
         RequestParams requestParams = new RequestParams();
         requestParams.put("q", query);
