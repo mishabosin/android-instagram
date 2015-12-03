@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.codepath.instagram.R;
+import com.codepath.instagram.helpers.Utils;
 import com.codepath.instagram.models.InstagramSearchTag;
 
 import java.util.List;
@@ -44,8 +45,7 @@ public class SearchTagResultsAdapter extends
         InstagramSearchTag tag = tags.get(position);
 
         holder.tvTag.setText(tag.tag);
-        // TODO: format this nicely
-        holder.tvCount.setText(String.valueOf(tag.count));
+        holder.tvCount.setText(Utils.formatNumberForDisplay(tag.count));
     }
 
     @Override
