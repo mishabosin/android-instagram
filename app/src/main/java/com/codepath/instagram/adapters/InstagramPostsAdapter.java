@@ -191,4 +191,14 @@ public class InstagramPostsAdapter extends
     public int getItemCount() {
         return posts.size();
     }
+
+    public void clear() {
+        posts.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<InstagramPost> list) {
+        posts.addAll(list);
+        notifyDataSetChanged();
+    }
 }

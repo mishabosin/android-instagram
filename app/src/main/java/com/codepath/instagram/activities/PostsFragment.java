@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,8 +36,9 @@ import java.util.List;
 
 public class PostsFragment extends Fragment {
     private List<InstagramPost> posts = new ArrayList<>();
-    InstagramPostsAdapter postsAdapter;
-    InstagramClient instagramClient;
+    private InstagramPostsAdapter postsAdapter;
+    private InstagramClient instagramClient;
+    private SwipeRefreshLayout swipeContainer;
 
     public static PostsFragment newInstance() {
         return new PostsFragment();
@@ -59,23 +61,14 @@ public class PostsFragment extends Fragment {
         instagramClient = MainApplication.getRestClient();
         Context context = view.getContext();
 
-        initAdapter(context);
+        initAdapter();
         initRecyclerView(view);
+        initSwipeContainer(view);
 
         fetchPosts(context);
     }
-
-    private void initRecyclerView(View view) {
-        RecyclerView rvPosts = (RecyclerView) view.findViewById(R.id.rvPosts);
-        int spacing = getResources().getInteger(R.integer.post_spacing);
-        SimpleVerticalSpacerItemDecoration spacingDecoration =
-                new SimpleVerticalSpacerItemDecoration(spacing);
-        rvPosts.addItemDecoration(spacingDecoration);
-        rvPosts.setAdapter(postsAdapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(view.getContext()));
-    }
-
-    private void initAdapter(Context context) {
+    
+    private void initAdapter() {
         postsAdapter = new InstagramPostsAdapter(posts);
         postsAdapter.setOnAllCommentsClickListener(new OnAllCommentsClickListener() {
             @Override
@@ -91,9 +84,42 @@ public class PostsFragment extends Fragment {
         });
     }
 
+    private void initRecyclerView(View view) {
+        RecyclerView rvPosts = (RecyclerView) view.findViewById(R.id.rvPosts);
+        int spacing = getResources().getInteger(R.integer.post_spacing);
+        SimpleVerticalSpacerItemDecoration spacingDecoration =
+                new SimpleVerticalSpacerItemDecoration(spacing);
+        rvPosts.addItemDecoration(spacingDecoration);
+        rvPosts.setAdapter(postsAdapter);
+        rvPosts.setLayoutManager(new LinearLayoutManager(view.getContext()));
+    }
+
+    private void initSwipeContainer(View view) {
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchPosts(getContext());
+            }
+        });
+        // Progress animation colors. The first color is also used in the
+        // refresh icon that shows up when the user makes the initial gesture
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
+
     private void fetchPosts(final Context context) {
         instagramClient.getMyFeed(
                 new JsonHttpResponseHandler() {
+
+                    private void handleError(int statusCode) {
+                        String msg = "Failed to get Instagram feed: " + String.valueOf(statusCode);
+                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                        swipeContainer.setRefreshing(false);
+                    }
 
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -101,18 +127,17 @@ public class PostsFragment extends Fragment {
                         posts.clear();
                         posts.addAll(newPosts);
                         postsAdapter.notifyDataSetChanged();
+                        swipeContainer.setRefreshing(false);
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        String msg = "Failed to get Instagram feed: " + String.valueOf(statusCode);
-                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                        handleError(statusCode);
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        String msg = "Failed to get Instagram feed: " + String.valueOf(statusCode);
-                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                        handleError(statusCode);
                     }
                 }
         );
