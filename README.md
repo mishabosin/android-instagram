@@ -47,13 +47,25 @@ The following user stories are optional:
 * [ ] Include a ProgressBar during network loading.
 * [ ] User can get a grid of photos by clicking on a search result (i.e. a user or tag).
 
+### Day 4
+
+Time spent: **100** hours total
+
+* [ ] Add pull-to-refresh for the home feed with SwipeRefreshLayout.
+* [ ] User can open the Instagram client offline and see last loaded feed.
+* [ ] Each media item is persisted into SQlite and can be displayed from the local DB.
+* [ ] Create a background service to make the network request, load items into the DB and populate the view (for the user's home feed).
+
+The following user stories are optional:
+* [ ] Add the ability for users to comment on a post.
+
 ## Video Walkthrough
 
   ![Imgur](http://i.imgur.com/i5baxfN.gif)
 
 ## Notes
 
-* Learned a lot about the rendering properties
+* Learned a lot about the rendering properties, fragments, basic networking, menu tabs
 
 ## License
 
