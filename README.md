@@ -39,7 +39,7 @@ Time spent: **8** hours total
 * [x] User can login to Instagram using OAuth login.
 * [x] User can view their own feed.
 * [x] User can search for a user by username.
-* [ ] User can search for a tag.
+* [x] User can search for a tag.
 * [ ] On the search screen, there will now be 2 tabs corresponding to "USERS" and "TAGS".
 * [ ] When performing a search, the user can switch between the "USERS" tab and the "TAGS" tab and see search results for each one.
 

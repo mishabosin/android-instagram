@@ -63,7 +63,6 @@ public class HomeFragmentStatePagerAdapter extends SmartFragmentStatePagerAdapte
         ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
         sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return sb;
-//        return "Hi";
     }
 
     @Override
