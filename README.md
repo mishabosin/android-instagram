@@ -49,7 +49,7 @@ The following user stories are optional:
 
 ## Video Walkthrough
 
-  ![Imgur](http://i.imgur.com/ArpPCZw.gif)
+  ![Imgur](http://i.imgur.com/i5baxfN.gif)
 
 ## Notes
 
