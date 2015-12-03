@@ -1,33 +1,35 @@
 package com.codepath.instagram.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.codepath.instagram.R;
+import com.codepath.instagram.adapters.HomeFragmentStatePagerAdapter;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
+
+    private HomeFragmentStatePagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        initFragment();
+        initPager();
     }
 
-    private void initFragment() {
-        // Begin the transaction
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+    private void initPager() {
+        ViewPager vpPager = (ViewPager) findViewById(R.id.vpPager);
+        pagerAdapter = new HomeFragmentStatePagerAdapter(getSupportFragmentManager(), this);
+        vpPager.setAdapter(pagerAdapter);
 
-        // Replace the contents of the container with the new fragment
-        ft.replace(R.id.flFragContainer, new PostsFragment());
-        // or ft.add(R.id.your_placeholder, new FooFragment());
-
-        // Complete the changes added above
-        ft.commit();
+        // Give the TabLayout the ViewPager
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(vpPager);
     }
 
     @Override
