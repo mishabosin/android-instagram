@@ -13,6 +13,9 @@
     <string name="comments">comments</string>
     <string name="comments_title">Comments</string>
 
+    <string name="search_users_title">Users</string>
+    <string name="search_tags_title">Tags</string>
+
     <string name="heart_img_description">Heart to like the post</string>
     <string name="comment_img_description">Comment on the post</string>
 </resources>
