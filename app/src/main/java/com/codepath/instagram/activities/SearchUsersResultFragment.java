@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.codepath.instagram.R;
 import com.codepath.instagram.adapters.SearchUserResultsAdapter;
@@ -115,13 +116,13 @@ public class SearchUsersResultFragment extends Fragment {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 String msg = "Failed to search for Users: " + String.valueOf(statusCode);
-                // Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                 Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 String msg = "Failed to search for Users: " + String.valueOf(statusCode);
-                // Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                 Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
             }
         });
     }

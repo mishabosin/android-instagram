@@ -58,7 +58,7 @@ public class SearchUserResultsAdapter extends
     }
 
     private void renderAvatar(SearchUserViewHolder holder, InstagramUser user) {
-        int radius = R.dimen.comment_avatar_size / 2;
+        int radius = R.dimen.user_avatar_size / 2;
         Transformation makeCircle = new RoundedTransformationBuilder()
                 .cornerRadiusDp(radius)
                 .oval(true)
