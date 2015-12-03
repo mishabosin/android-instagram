@@ -34,7 +34,7 @@ The following user stories are optional:
 
 ### Day 3
 
-Time spent: **8** hours total
+Time spent: **10** hours total
 
 * [x] User can login to Instagram using OAuth login.
 * [x] User can view their own feed.
