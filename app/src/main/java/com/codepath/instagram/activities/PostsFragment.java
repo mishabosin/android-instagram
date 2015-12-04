@@ -1,9 +1,13 @@
 package com.codepath.instagram.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,8 +28,10 @@ import com.codepath.instagram.helpers.Utils;
 import com.codepath.instagram.listeners.OnAllCommentsClickListener;
 import com.codepath.instagram.listeners.OnDotsClickListener;
 import com.codepath.instagram.models.InstagramPost;
+import com.codepath.instagram.models.InstagramPosts;
 import com.codepath.instagram.networking.InstagramClient;
 import com.codepath.instagram.persistence.InstagramClientDatabase;
+import com.codepath.instagram.services.InstagramNetworkService;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -42,12 +48,57 @@ public class PostsFragment extends Fragment {
 
     private InstagramClientDatabase db;
 
+    // Define the callback for what to do when data is received
+    private BroadcastReceiver networkSuccessReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(getContext(), "Loaded posts from the network service", Toast.LENGTH_SHORT).show();
+            InstagramPosts postData = (InstagramPosts) intent.getSerializableExtra(InstagramNetworkService.INTENT_DATA);
+            List<InstagramPost> newPosts = postData.getPosts();
+            renderNewPosts(newPosts);
+            persistNewPosts(newPosts);
+        }
+    };
+
+    // Define the callback for what to do when data is received
+    private BroadcastReceiver networkFailureReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int statusCode = intent.getIntExtra(InstagramNetworkService.INTENT_STATUS_CODE, 418);
+            handleError(statusCode);
+        }
+    };
+
     public static PostsFragment newInstance() {
         return new PostsFragment();
     }
 
     public PostsFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Register for the particular broadcast based on ACTION string
+        IntentFilter successFilter = new IntentFilter(InstagramNetworkService.ACTION_SUCCESS);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(networkSuccessReceiver, successFilter);
+        IntentFilter failureFilter = new IntentFilter(InstagramNetworkService.ACTION_FAILURE);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(networkFailureReceiver, failureFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Unregister the listener when the application is paused
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(networkSuccessReceiver);
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(networkFailureReceiver);
+    }
+
+    private void requestPostsFromService() {
+        Intent i = new Intent(getContext(), InstagramNetworkService.class);
+        Context ActivityContext = PostsFragment.this.getActivity();
+        ActivityContext.startService(i);
     }
 
 
@@ -102,7 +153,7 @@ public class PostsFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchPosts();
+                requestPostsFromService();
             }
         });
         // Progress animation colors. The first color is also used in the
@@ -118,30 +169,28 @@ public class PostsFragment extends Fragment {
     }
 
     private void getPosts() {
-        if (instagramClient.isNetworkAvailable()) {
-            fetchPosts();
-        } else {
-            List<InstagramPost> newPosts = db.getAllInstagramPosts();
-            refreshPosts(newPosts);
-        }
+        renderNewPosts(db.getAllInstagramPosts());
+        requestPostsFromService();
     }
 
+    protected void handleError(int statusCode) {
+        String msg = "Failed to get Instagram feed: " + String.valueOf(statusCode);
+        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+        swipeContainer.setRefreshing(false);
+    }
+
+    /**
+     * @deprecated in favor of requestPostsFromService
+     */
     private void fetchPosts() {
         instagramClient.getMyFeed(
                 new JsonHttpResponseHandler() {
 
-                    private void handleError(int statusCode) {
-                        String msg = "Failed to get Instagram feed: " + String.valueOf(statusCode);
-                        Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
-                        swipeContainer.setRefreshing(false);
-                    }
-
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         List<InstagramPost> newPosts = Utils.decodePostsFromJsonResponse(response);
-                        refreshPosts(newPosts);
-                        db.emptyAllTables();
-                        db.addInstagramPosts(newPosts);
+                        renderNewPosts(newPosts);
+                        persistNewPosts(newPosts);
                     }
 
                     @Override
@@ -157,11 +206,16 @@ public class PostsFragment extends Fragment {
         );
     }
 
-    private void refreshPosts(List<InstagramPost> newPosts) {
+    private void renderNewPosts(List<InstagramPost> newPosts) {
         posts.clear();
         posts.addAll(newPosts);
         postsAdapter.notifyDataSetChanged();
         swipeContainer.setRefreshing(false);
+    }
+
+    private void persistNewPosts(List<InstagramPost> newPosts) {
+        db.emptyAllTables();
+        db.addInstagramPosts(newPosts);
     }
 
     private void startAllCommentsActivity(int position, View itemView) {

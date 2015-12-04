@@ -40,6 +40,10 @@
                     />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".services.InstagramNetworkService"
+            android:exported="false"/>
     </application>
 
 </manifest>

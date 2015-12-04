@@ -49,19 +49,20 @@ The following user stories are optional:
 
 ### Day 4
 
-Time spent: **100** hours total
+Time spent: **8** hours total
 
 * [x] Add pull-to-refresh for the home feed with SwipeRefreshLayout.
 * [x] User can open the Instagram client offline and see last loaded feed.
 * [x] Each media item is persisted into SQlite and can be displayed from the local DB.
-* [ ] Create a background service to make the network request, load items into the DB and populate the view (for the user's home feed).
+* [x] Create a background service to make the network request, load items into the DB and populate the view (for the user's home feed).
+        - Got this working for the popular feed
 
 The following user stories are optional:
 * [ ] Add the ability for users to comment on a post.
 
 ## Video Walkthrough
 
-  ![Imgur](http://i.imgur.com/i5baxfN.gif)
+  ![Imgur](http://i.imgur.com/Jc71zuY.gif)
 
 ## Notes
 
