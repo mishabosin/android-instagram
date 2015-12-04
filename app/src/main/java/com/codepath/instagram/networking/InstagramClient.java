@@ -31,9 +31,12 @@ public class InstagramClient extends OAuthBaseClient {
         client.get(url, responseHandler);
     }
 
+    public String getMyFeedUrl() {
+        return getApiUrl("users/self/feed");
+    }
+
     public void getMyFeed(JsonHttpResponseHandler responseHandler) {
-        String url = getApiUrl("users/self/feed");
-        client.get(url, responseHandler);
+        client.get(getMyFeedUrl(), responseHandler);
     }
 
     public void getMediaComments(String mediaId, JsonHttpResponseHandler responseHandler) {
@@ -65,5 +68,9 @@ public class InstagramClient extends OAuthBaseClient {
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    public String getToken() {
+        return client.getAccessToken().getToken();
     }
 }

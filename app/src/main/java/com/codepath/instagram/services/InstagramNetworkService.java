@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.codepath.instagram.core.MainApplication;
 import com.codepath.instagram.helpers.Utils;
 import com.codepath.instagram.models.InstagramPost;
 import com.codepath.instagram.models.InstagramPosts;
+import com.codepath.instagram.networking.InstagramClient;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -43,14 +45,13 @@ public class InstagramNetworkService extends IntentService {
             return;
         }
 
-        // TODO: get the self feed using the token
-        // String url = "https://api.instagram.com/v1/users/self/feed";
-        // InstagramClient instagramClient = MainApplication.getRestClient();
-        // String token = client.getAccessToken().getToken
-        // RequestParams params = new RequestParams("access_token", token);
-
-        String url = "https://api.instagram.com/v1/media/popular";
-        RequestParams params = new RequestParams("client_id", "e05c462ebd86446ea48a5af73769b602");
+        InstagramClient instagramClient = MainApplication.getRestClient();
+        String url = instagramClient.getMyFeedUrl();
+        String token = instagramClient.getToken();
+        RequestParams params = new RequestParams("access_token", token);
+        // Popular feed:
+        // String url = "https://api.instagram.com/v1/media/popular";
+        // RequestParams params = new RequestParams("client_id", "e05c462ebd86446ea48a5af73769b602");
 
         aClient.get(this, url, params, new JsonHttpResponseHandler() {
 
